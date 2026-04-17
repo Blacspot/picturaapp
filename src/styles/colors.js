@@ -1,0 +1,16 @@
+export const COLORS = {
+    bg: "#0a0a0f",
+    surface: "#13131a",
+    surfaceHover: "#1a1a24",
+    border: "2a2a3a",
+    borderHover: "#3a3a50",
+    accent: "#6c63ff",
+    accentHover: "#7d75ff",
+    accentDim:"rgba(108, 99, 255, 0.15)",
+    text:  "#f0eeff",
+    textMuted:"#8b8aaa",
+    textDim:"#555570",
+    success: "#22c55e",
+    error: "#ef4444",
+    errorDim: "rgba(239, 68, 68, 0.12)",
+};
