@@ -2,7 +2,7 @@ export const COLORS = {
     bg: "#0a0a0f",
     surface: "#13131a",
     surfaceHover: "#1a1a24",
-    border: "2a2a3a",
+    border: "#2a2a3a",
     borderHover: "#3a3a50",
     accent: "#6c63ff",
     accentHover: "#7d75ff",

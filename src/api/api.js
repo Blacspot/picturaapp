@@ -1,4 +1,4 @@
-const API_BASE = "https://localhost:3000/api";
+const API_BASE = "http://localhost:3000/api";
 
 export const api = {
     register: async (token, displayName, email) => {
@@ -26,6 +26,13 @@ export const api = {
             method: "POST",
             headers: { Authorization: `Bearer ${token}`},
             body: form,
+        });
+        return res.json();
+    },
+    deletePicture: async (token) => {
+        const res = await fetch(`${API_BASE}/users/profile-picture`, {
+            method: "DELETE",
+            headers: { Authorization: `Bearer ${token}`},
         });
         return res.json();
     },
