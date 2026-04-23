@@ -1,4 +1,4 @@
-import { auth } from './firebaseStub';
+import { auth } from "../../auth/firebasestub";
 
 /**
  * Returns a valid, fresh Firebase ID token.
