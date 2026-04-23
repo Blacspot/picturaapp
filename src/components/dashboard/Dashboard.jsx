@@ -10,7 +10,7 @@ const fmtSize = (b) =>
     ? `${(b / 1024).toFixed(1)} KB`
     : `${(b / (1024 * 1024)).toFixed(1)} MB`;
 
-export default function Dashboard({ user, onLogout}) {
+export default function Dashboard({ user, onLogout, onSessionExpired }) {
     const [profileImg, setProfileImg] = useState(user.profileImg?.url || null);
     const [seledtedFile, setSelectedFile] = useState(null);
     const [preview, setPreview] = useState(null);
@@ -64,6 +64,7 @@ export default function Dashboard({ user, onLogout}) {
             showToast("Profile picture updated successfully.");
             clearSelection();
         } catch (error) {
+          if (error.message === "SESSION_EXPIRED") return onSessionExpired();      
           showToast("Upload failed. Check your connection.", "error");  
         } finally {
             setUploading(false);

@@ -26,6 +26,11 @@ export default function App() {
     setPage("login");
   };
 
+  const handleSessionExpired = () => {
+    setUser(null);
+    setPage('login');
+  };
+
   return (
     <div className="app-root">
       <div className="grid-bg"/>
@@ -47,7 +52,11 @@ export default function App() {
       )}
 
       {page === "dashboard" && user && (
-        <Dashboard user={user} onLogout={handleLogout}/>
+        <Dashboard
+         user={user} 
+         onLogout={handleLogout}
+         onSessionExpired={handleSessionExpired}
+         />
       )}
     </div>
   );
