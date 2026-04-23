@@ -1,29 +1,46 @@
-export const firebaseStub = {
-    signUp: async (email, password, displayName) => {
-        await new Promise(r => setTimeout(r, 1200));
+import { initializeApp } from 'firebase/app';
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  updateProfile,
+} from 'firebase/auth';
 
-        if (!email.includes("@")) throw new Error("Invalid email address");
-        if (password.length < 6) throw new Error("Password must be at least 6 characters");
-
-        return {
-            uid: "uid_" + Math.random().toString(36).slice(2),
-            email,
-            displayName,
-            idToken: "mock_token_" + Date.now(),
-        };
-    },
-
-    signIn: async (email, password) => {
-        await new Promise(r => setTimeout(r, 1000));
-
-        if (!email.includes("@")) throw new Error("Invalid email address");
-        if (password.length < 6) throw new Error("Incorrect password");
-
-        return {
-            uid: "uid_demo",
-            email,
-            displayName: email.split("@")[0],
-            idToken: "mock_token_" + Date.now(),
-        };
-    },
+const firebaseConfig = {
+  apiKey:            import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain:        import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId:         import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket:     import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId:             import.meta.env.VITE_FIREBASE_APP_ID,
 };
+
+const app  = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+export const firebaseStub = {
+  signUp: async (email, password, displayName) => {
+    const credential = await createUserWithEmailAndPassword(auth, email, password);
+    await updateProfile(credential.user, { displayName });
+    const idToken = await credential.user.getIdToken();
+    return {
+      uid: credential.user.uid,
+      email: credential.user.email,
+      displayName,
+      idToken,
+    };
+  },
+
+  signIn: async (email, password) => {
+    const credential = await signInWithEmailAndPassword(auth, email, password);
+    const idToken = await credential.user.getIdToken();
+    return {
+      uid: credential.user.uid,
+      email: credential.user.email,
+      displayName: credential.user.displayName || credential.user.email.split('@')[0],
+      idToken,
+    };
+  },
+};
+
+export { auth };
