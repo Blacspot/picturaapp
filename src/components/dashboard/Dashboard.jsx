@@ -11,8 +11,8 @@ const fmtSize = (b) =>
     : `${(b / (1024 * 1024)).toFixed(1)} MB`;
 
 export default function Dashboard({ user, onLogout, onSessionExpired }) {
-    const [profileImg, setProfileImg] = useState(user.profileImg?.url || null);
-    const [seledtedFile, setSelectedFile] = useState(null);
+    const [profileImg, setProfileImg] = useState(user.profileImage?.url || null);
+    const [selectedFile, setSelectedFile] = useState(null);
     const [preview, setPreview] = useState(null);
     const [dragOver, setDragOver] = useState(false);
     const [uploading, setUploading] = useState(false);
@@ -39,7 +39,7 @@ export default function Dashboard({ user, onLogout, onSessionExpired }) {
     const handleDrop = (e) => {
         e.preventDefault();
         setDragOver(false);
-        handleFile(file);
+        handleFile(e.dataTransfer.file[0]);
     };
 
     const clearSelection = () => {
@@ -48,16 +48,16 @@ export default function Dashboard({ user, onLogout, onSessionExpired }) {
         if (fileInputRef.current) fileInputRef.current.value = "";
     };
     const handleUpload = async () => {
-        if (!seledtedFile) return;
+        if (!selectedFile) return;
         setUploading(true);
         setProgress(20);
         try {
             setProgress(50);
-            const result = await api.uploadPicture(user.idToken, seledtedFile);
+            const result = await api.uploadPicture(user.idToken, selectedFile);
             setProgress(100);
             await new Promise((r) => setTimeout(r, 500));
-            if (result.profileImg?.url) {
-                setProfileImg(result.profileImg.url);
+            if (result.profileImage?.url) {
+                setProfileImg(result.profileImage.url);
             } else {
                 setProfileImg(preview);
             }
@@ -161,8 +161,8 @@ export default function Dashboard({ user, onLogout, onSessionExpired }) {
                                     <div className="preview-strip">
                                        <img src={preview} alt="preview" className="preview-thumb" />
                                        <div className="preview-info">
-                                          <p className="preview-name">{seledtedFile.name}</p>
-                                          <p className="preview-size">{fmtSize(seledtedFile.size)}</p>
+                                          <p className="preview-name">{selectedFile.name}</p>
+                                          <p className="preview-size">{fmtSize(selectedFile.size)}</p>
                                        </div>
                                        <div className="preview-clear" onClick={(e) => { e.stopPropagation(); clearSelection(); }}>
                                          x
@@ -193,7 +193,7 @@ export default function Dashboard({ user, onLogout, onSessionExpired }) {
                                   <button
                                   className="btn-upload"
                                   onClick={handleUpload}
-                                  disabled={!seledtedFile || uploading}
+                                  disabled={!selectedFile || uploading}
                                   >
                                    {uploading
                                      ? <><span className="spinner" /> Uploading</>

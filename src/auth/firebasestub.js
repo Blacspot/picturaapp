@@ -20,6 +20,7 @@ const auth = getAuth(app);
 
 export const firebaseStub = {
   signUp: async (email, password, displayName) => {
+    try {
     const credential = await createUserWithEmailAndPassword(auth, email, password);
     await updateProfile(credential.user, { displayName });
     const idToken = await credential.user.getIdToken();
@@ -29,10 +30,16 @@ export const firebaseStub = {
       displayName,
       idToken,
     };
+    } catch (error) {
+      console.error('Error code:', error.code);
+      console.error('Error message:', error.message);
+      throw error;
+    }
+    
   },
 
   signIn: async (email, password) => {
-    const credential = await signInWithEmailAndPassword(auth, email, password);
+    const credential = await signInWithEmailAndPassword(auth, email.trim(), password);
     const idToken = await credential.user.getIdToken();
     return {
       uid: credential.user.uid,

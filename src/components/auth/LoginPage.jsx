@@ -59,7 +59,7 @@ export default function LoginPage({ onLogin, onGoSignup }) {
 
             <button className="btn-primary" onClick={handle} disabled={loading}>
               {loading
-                ? <><span className="spinner"/> Signing in... </>
+                ? <><span className="spinner"/> Sign in... </>
                 : "Signing in"
               }
             </button>

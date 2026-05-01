@@ -13,9 +13,11 @@ export default function SignupPage({ onSignup, onGoLogin }) {
     if (!form.email.trim()) return setError("Please enter your email");
     if (form.password.length < 6) return setError("Password must be at least 6 characters.");
     if (form.password !== form.confirm) return setError("Passwords do not match.");
+
+    
     setLoading(true);
     try {
-        const user = await firebaseStub.signUp(form.name, form.email, form.password);
+        const user = await firebaseStub.signUp(form.email, form.password, form.name);
         onSignup(user);
     } catch (e) {
         setError(e.message);
